@@ -9,16 +9,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-
 public class Login extends JFrame {
 
     private Control control = new Control(this);
     private Client client = new Client("", 0);
 
     private JPanel panelPrincipal = new JPanel();
-
     private JTextField txtIdentification = new JTextField("Identificación...");
-
     private JButton btnLogin = new JButton("Ingresar");
 
     public Login() {
@@ -28,6 +25,15 @@ public class Login extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        configureMainPanel();
+        configureLoginButton();
+
+        add(panelPrincipal);
+        pack();
+        setTitle("Inicio de Sesión");
+    }
+
+    private void configureMainPanel() {
         panelPrincipal.setLayout(new BorderLayout());
         panelPrincipal.setBackground(new Color(240, 240, 240));
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
@@ -55,6 +61,10 @@ public class Login extends JFrame {
         JPanel panelSouth = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panelSouth.setBackground(new Color(240, 240, 240));
 
+        panelPrincipal.add(panelSouth, BorderLayout.SOUTH);
+    }
+
+    private void configureLoginButton() {
         btnLogin.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)));
@@ -74,18 +84,13 @@ public class Login extends JFrame {
             }
         });
 
-        addButtonToPanel(btnLogin, panelSouth, e -> {
+        addButtonToPanel(btnLogin, (JPanel) panelPrincipal.getComponent(2), e -> {
             if (control.idExists(txtIdentification.getText())) {
                 client.setId(Integer.parseInt(txtIdentification.getText()));
                 new HospitalForm(this).setVisible(true);
                 dispose();
             }
         });
-        panelPrincipal.add(panelSouth, BorderLayout.SOUTH);
-
-        add(panelPrincipal);
-        pack();
-        setTitle("Inicio de Sesión");
     }
 
     private void addButtonToPanel(JButton button, JPanel panel, ActionListener listener) {
