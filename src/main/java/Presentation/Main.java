@@ -1,9 +1,16 @@
-package Logic;
+package Presentation;
 
-public class main {
+import GUI.Login;
+import Control.Control;
+import Logic.ShiftSystem;
+
+public class Main {
 
     public static void main(String[] args) {
-        sistema_Turnos st = new sistema_Turnos();
+        Login principal = new Login();
+        new Control(principal).launchWindow();
+        /*
+        ShiftSystem st = new ShiftSystem();
 
         st.turno("juan",428956,"Consulta general");
         st.turno("pepe",428956,"Consulta cardiologia");
@@ -19,11 +26,8 @@ public class main {
         System.out.println(st.getCons_Cardi().size());
         System.out.println("consulta general");
         for (int i = 0; i <st.getCons_Gene().size() ; i++) {
-            System.out.println(st.getCons_Gene().get(i).getCliente().getNombre());
+            System.out.println(st.getCons_Gene().get(i).getCliente().getName());
         }
-
-
-
-
+         */
     }
 }
