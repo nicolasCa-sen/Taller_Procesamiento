@@ -77,7 +77,6 @@ public class Login extends JFrame {
         addButtonToPanel(btnLogin, panelSouth, e -> {
             if (control.idExists(txtIdentification.getText())) {
                 client.setId(Integer.parseInt(txtIdentification.getText()));
-                System.out.println(client.getId());
                 new HospitalForm(this).setVisible(true);
                 dispose();
             }

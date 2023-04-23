@@ -120,7 +120,8 @@ public class HospitalForm extends JFrame {
             configPanel(panelModuleButtons[i], new FlowLayout(FlowLayout.CENTER, 10, 5));
             configButton(moduleButtons[i], BUTTON_WIDTH,  BUTTON_HEIGHT, BUTTON_FONT_SIZE);
             addButtonToPanel(moduleButtons[i], panelModuleButtons[i], e -> {
-
+                new RowCustomer().setVisible(true);
+                dispose();
             });
 
             configPanel(panelShifts[i], new GridLayout(2, 3, 5, 0));
