@@ -1,16 +1,16 @@
 package Logic;
 
-public class consult {
+public class Consultation {
 
     private   String  nombre ;
 
-    private cliente cliente;
+    private Client Client;
     private int turno;
     private boolean atencion;
 
-    public consult(String nombre, Logic.cliente cliente, int turno) {
+    public Consultation(String nombre, Client Client, int turno) {
         this.nombre = nombre;
-        this.cliente = cliente;
+        this.Client = Client;
         this.turno = turno;
         this.atencion = false;
     }
@@ -23,12 +23,12 @@ public class consult {
         return turno;
     }
 
-    public Logic.cliente getCliente() {
-        return cliente;
+    public Client getCliente() {
+        return Client;
     }
 
-    public void setCliente(Logic.cliente cliente) {
-        this.cliente = cliente;
+    public void setCliente(Client Client) {
+        this.Client = Client;
     }
 
     public String getNombre() {

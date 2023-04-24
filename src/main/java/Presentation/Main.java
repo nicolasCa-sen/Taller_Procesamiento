@@ -1,9 +1,19 @@
-package Logic;
+package Presentation;
 
-public class main {
+import GUI.Login;
+import Control.Control;
+import Control.processes;
+import Logic.ShiftSystem;
+
+public class Main {
 
     public static void main(String[] args) {
-        sistema_Turnos st = new sistema_Turnos();
+        /*
+        Login principal = new Login();
+        new Control(principal).launchWindow();
+         */
+
+        ShiftSystem st = new ShiftSystem();
 
         st.turno("juan",428956,"Consulta general");
         st.turno("pepe",428956,"Consulta cardiologia");
@@ -14,38 +24,19 @@ public class main {
         st.turno("pedro",428956,"Consulta general");
         st.turno("santiago",428956,"Consulta general");
         st.turno("ana",428956,"Consulta general");
-
-        System.out.println(st.getCons_Gene().size());
-        System.out.println(st.getCons_Cardi().size());
-        System.out.println("============================================");
-        System.out.println("consulta general");
-        for (int i = 0; i <st.getCons_Gene().size() ; i++) {
-            System.out.println(st.getCons_Gene().get(i).getCliente().getNombre());
-        }
-        System.out.println("============================================");
-        for (int i = 0; i <st.getCons_Gene().size() ; i++) {
-            st.getCons_Gene().get(i).setAtencion(true);
-        }
         st.turno("juan",428956,"Consulta general");
         st.turno("nico",428956,"Consulta general");
         st.turno("numar",428956,"Consulta general");
         st.turno("juan",428956,"Consulta general");
         st.turno("juan",428956,"Consulta general");
+
+        System.out.println(st.getCons_Gene().size());
         System.out.println("============================================");
         System.out.println("consulta general");
-        for (int i = 0; i <st.getCons_Gene().size() ; i++) {
-            if (!st.getCons_Gene().get(i).isAtencion()){
-                System.out.println(st.getCons_Gene().get(i).getCliente().getNombre());
-            }
 
-        }
-
-
-
-
-
-
-
+        processes pc = new processes();
+        pc.recorrido(st.getCons_Gene());
+        new Thread(pc).start();
 
     }
 }
