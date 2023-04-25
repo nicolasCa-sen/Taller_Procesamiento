@@ -13,7 +13,7 @@ import java.util.Optional;
 public class HospitalForm extends JFrame {
 
     // Atributos de la clase
-    private static final int FORM_WIDTH = 854;
+    private static final int FORM_WIDTH = 1000;
     private static final int FORM_HEIGHT = 480;
 
     private final int BUTTON_WIDTH = 500;

@@ -1,4 +1,4 @@
-package Control;
+package Logic;
 
 import Logic.Client;
 import Logic.Consultation;
@@ -9,15 +9,18 @@ import java.util.Random;
 
 public class processes implements Runnable{
 
-    private Client client;
 
-    private Integer numero;
+    private ArrayList<Consultation> array;
 
-    public processes() {
+    private int seg;
 
+    public processes(ArrayList<Consultation> array, int seg) {
+        this.array = array;
+        this.seg = seg;
     }
 
-    public void recorrido(ArrayList<Consultation> array){
+    @Override
+    public void run(){
         for (int i = 0; i <array.size() ; i++) {
             if (!array.get(i).isAtencion()){
                 //System.out.println(i);
@@ -28,18 +31,15 @@ public class processes implements Runnable{
                 String timeChain = timeNow.getHour() + ":" + timeNow.getMinute() + ":" + timeNow.getSecond();
                 System.out.println(timeChain);
                 //System.out.println(client.getId());
-                run();
+                try{
+                    Thread.sleep(seg*1000);
+
+                }catch (InterruptedException e){
+                    throw  new RuntimeException(e);
+                }
+
             }
         }
-    }
-    @Override
-    public void run(){
 
-        try{
-            Thread.sleep(5000);
-
-        }catch (InterruptedException e){
-            throw  new RuntimeException(e);
-        }
     }
 }

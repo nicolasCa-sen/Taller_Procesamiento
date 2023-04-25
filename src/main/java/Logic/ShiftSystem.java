@@ -14,39 +14,25 @@ public class ShiftSystem {
     public ShiftSystem() {
     }
 
-    public void turno(String nombre, int identificacion, String t_Consult){
-        int form = 0;
+    public void turno( Client client, Integer t_Consult){
 
-        if (t_Consult.equals("Consulta general")) {
-            form = 1;
-        }
-        if (t_Consult.equals("Consulta cardiologia")) {
-            form = 2;
-        }
-        if (t_Consult.equals("Consulta traumatologia")) {
-            form = 3;
-        }
-        if (t_Consult.equals("Consulta oftalmologia")) {
-            form = 4;
-        }
-        if (t_Consult.equals("Consulta dermatologia")) {
-            form = 5;
-        }
-        switch (form) {
-            case 1:
-                cons_Gene.add(new Consultation(t_Consult,new Client(nombre,identificacion),cons_Gene.size()));
+
+
+        switch (t_Consult) {
+            case 0:
+                cons_Gene.add(new Consultation(client,cons_Gene.size()+1));
                 break;
-            case 2:
-                cons_Cardi.add(new Consultation(t_Consult,new Client(nombre,identificacion),cons_Cardi.size()));
+            case 1:
+                cons_Cardi.add(new Consultation(client,cons_Cardi.size()+1));
+                break;
+            case 2 :
+                cons_Trauma.add(new Consultation(client,cons_Trauma.size()+1));
                 break;
             case 3 :
-                cons_Trauma.add(new Consultation(t_Consult,new Client(nombre,identificacion),cons_Trauma.size()));
+                cons_Oftam.add(new Consultation(client,cons_Oftam.size()+1));
                 break;
             case 4 :
-                cons_Oftam.add(new Consultation(t_Consult,new Client(nombre,identificacion),cons_Oftam.size()));
-                break;
-            case 5 :
-                cons_Dermat.add(new Consultation(t_Consult,new Client(nombre,identificacion),cons_Dermat.size()));
+                cons_Dermat.add(new Consultation(client,cons_Dermat.size()+1));
                 break;
             default:
         }
