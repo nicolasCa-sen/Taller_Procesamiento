@@ -14,19 +14,19 @@ public class ConsultationProcess implements Runnable {
 
     @Override
     public void run() {
-        synchronized (consultationArray) {
-            for (Consultation currentConsultation : consultationArray) {
-                if (!currentConsultation.isStatus()) {
-                    currentConsultation.setStatus(true);
-                    System.out.println(currentConsultation.getShift());
-                    try {
-                        java.lang.Thread.sleep(secondsToWait * 1000);
-                    } catch (InterruptedException e) {
-                        System.err.println("Error al esperar " + secondsToWait + " segundos: " + e.getMessage());
-                        java.lang.Thread.currentThread().interrupt();
-                    }
+        for (int i = 0; i < consultationArray.size(); i++) {
+            Consultation currentConsultation = consultationArray.get(i);
+            if (!currentConsultation.isStatus()) {
+                currentConsultation.setStatus(true);
+                System.out.println(currentConsultation.getShift());
+                try {
+                    Thread.sleep(secondsToWait * 1000);
+                } catch (InterruptedException e) {
+                    System.err.println("Error al esperar " + secondsToWait + " segundos: " + e.getMessage());
+                    Thread.currentThread().interrupt();
                 }
             }
         }
     }
 }
+
