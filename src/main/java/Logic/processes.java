@@ -26,11 +26,8 @@ public class processes implements Runnable{
                 //System.out.println(i);
                 array.get(i).setAtencion(true);
 
-                System.out.println(array.get(i).getCliente().getName());
-                LocalTime timeNow = LocalTime.now();
-                String timeChain = timeNow.getHour() + ":" + timeNow.getMinute() + ":" + timeNow.getSecond();
-                System.out.println(timeChain);
-                //System.out.println(client.getId());
+                System.out.println(array.get(i).getTurno());
+                System.out.println(array.get(i+1).getTurno());
                 try{
                     Thread.sleep(seg*1000);
 

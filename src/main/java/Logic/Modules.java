@@ -45,22 +45,23 @@ public class Modules {
     }
 
     public void  Modul1(){
-
+        processes pc = new processes(st.getCons_Gene(),10);
     }
     public void  Modul2(){
+        processes pc = new processes(st.getCons_Gene(),10);
 
     }
     public void  Modul3(){
-
+        processes pc = new processes(st.getCons_Cardi(),15);
     }
     public void  Modul4(){
-
+        processes pc = new processes(st.getCons_Trauma(),25);
     }
     public void  Modul5(){
-
+        processes pc = new processes(st.getCons_Oftam(),30);
     }
     public void  Modul6(){
-
+        processes pc = new processes(st.getCons_Dermat(),60);
     }
 
 }
