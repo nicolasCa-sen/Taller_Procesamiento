@@ -2,34 +2,33 @@ package Logic;
 
 public class Consultation {
 
-    private Client Client;
-    private int turno;
-    private boolean atencion;
+    private Client client;
+    private int shift;
+    private boolean status;
 
     public Consultation(Client Client, int turno) {
-        this.Client = Client;
-        this.turno = turno;
-        this.atencion = false;
+        this.client = Client;
+        this.shift = turno;
+        this.status = false;
     }
 
-    public int getTurno() {
-        return turno;
+    public int getShift() {
+        return shift;
     }
 
     public Client getCliente() {
-        return Client;
+        return client;
     }
 
     public void setCliente(Client Client) {
-        this.Client = Client;
+        this.client = Client;
     }
 
-
-    public boolean isAtencion() {
-        return atencion;
+    public boolean isStatus() {
+        return status;
     }
 
-    public void setAtencion(boolean atencion) {
-        this.atencion = atencion;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

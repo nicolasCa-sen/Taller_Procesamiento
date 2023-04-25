@@ -15,14 +15,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class Control {
+public class LoginControl {
 
     private static final String FILE_NAME = "database.json";
     private static final Gson gson = new Gson();
     private List<Client> clientList;
     private Login login;
 
-    public Control(Login principal) {
+    public LoginControl(Login principal) {
         this.login = principal;
         loadClientList();
     }

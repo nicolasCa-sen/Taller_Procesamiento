@@ -1,67 +1,82 @@
 package Logic;
 
-import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Modules {
 
-    ShiftSystem st;
+    private ShiftSystem shiftSystem;
+
     public Modules() {
-        st = new ShiftSystem();
+        this.shiftSystem = new ShiftSystem();
     }
 
-
-    public void addRow(Client client, int id){
-
-        st.turno(client,id);
-
+    public void addRow(Client client, String consultationType) {
+        shiftSystem.turno(client, consultationType);
     }
 
-    public void listGeneral(){
-        System.out.println(generalcustomers(st.getCons_Gene()));
-    }
-    public void listCardio(){
-        System.out.println(generalcustomers(st.getCons_Cardi()));
-    }
-    public void listTraum(){
-        System.out.println(generalcustomers(st.getCons_Trauma()));
-    }
-    public void listOftamo(){
-        System.out.println(generalcustomers(st.getCons_Oftam()));
-    }
-    public void listDermato(){
-        System.out.println(generalcustomers(st.getCons_Dermat()));
+    public void listGeneral() {
+        List<Consultation> generalConsultations = shiftSystem.getConsultationsMap().get("Consulta médica general");
+        System.out.println(getGeneralCustomers(generalConsultations));
     }
 
-    private String generalcustomers(ArrayList<Consultation> array){
-        String data = "";
-        for (int i = 0; i <array.size() ; i++) {
-            if (!array.get(i).isAtencion()){
-                data = data + "\n"+"\n"+"el turno es "+array.get(i).getTurno()+"\n"+
-                        "nombre  : " + array.get(i).getCliente().getName();
+    public void listCardio() {
+        List<Consultation> cardioConsultations = shiftSystem.getConsultationsMap().get("Consulta con especialista en cardiología");
+        System.out.println(getGeneralCustomers(cardioConsultations));
+    }
+
+    public void listTraum() {
+        List<Consultation> traumaConsultations = shiftSystem.getConsultationsMap().get("Consulta con especialista en traumatología");
+        System.out.println(getGeneralCustomers(traumaConsultations));
+    }
+
+    public void listOftamo() {
+        List<Consultation> oftamConsultations = shiftSystem.getConsultationsMap().get("Consulta con especialista en oftalmología");
+        System.out.println(getGeneralCustomers(oftamConsultations));
+    }
+
+    public void listDermato() {
+        List<Consultation> dermatConsultations = shiftSystem.getConsultationsMap().get("Consulta con especialista en dermatología");
+        System.out.println(getGeneralCustomers(dermatConsultations));
+    }
+
+    private String getGeneralCustomers(List<Consultation> consultations) {
+        StringBuilder sb = new StringBuilder();
+        for (Consultation consultation : consultations) {
+            if (!consultation.isStatus()) {
+                sb.append("\n\nEl turno es ").append(consultation.getShift())
+                        .append("\nNombre: ").append(consultation.getCliente().getName());
             }
         }
-        return data;
+        return sb.toString();
     }
 
-    public void  Modul1(){
-        processes pc = new processes(st.getCons_Gene(),10);
-    }
-    public void  Modul2(){
-        processes pc = new processes(st.getCons_Gene(),10);
-
-    }
-    public void  Modul3(){
-        processes pc = new processes(st.getCons_Cardi(),15);
-    }
-    public void  Modul4(){
-        processes pc = new processes(st.getCons_Trauma(),25);
-    }
-    public void  Modul5(){
-        processes pc = new processes(st.getCons_Oftam(),30);
-    }
-    public void  Modul6(){
-        processes pc = new processes(st.getCons_Dermat(),60);
+    public void Modul1() {
+        List<Consultation> consultations = shiftSystem.getConsultationsMap().get("Consulta médica general");
+        ConsultationProcess thread = new ConsultationProcess(consultations, 10);
+        thread.run();
     }
 
+    public void Modul2() {
+        List<Consultation> consultations = shiftSystem.getConsultationsMap().get("Consulta con especialista en cardiología");
+        ConsultationProcess thread = new ConsultationProcess(consultations, 10);
+        thread.run();
+    }
+
+    public void Modul3() {
+        List<Consultation> consultations = shiftSystem.getConsultationsMap().get("Consulta con especialista en traumatología");
+        ConsultationProcess thread = new ConsultationProcess(consultations, 15);
+        thread.run();
+    }
+
+    public void Modul4() {
+        List<Consultation> consultations = shiftSystem.getConsultationsMap().get("Consulta con especialista en oftalmología");
+        ConsultationProcess thread = new ConsultationProcess(consultations, 25);
+        thread.run();
+    }
+
+    public void Modul5() {
+        List<Consultation> consultations = shiftSystem.getConsultationsMap().get("Consulta con especialista en dermatología");
+        ConsultationProcess thread = new ConsultationProcess(consultations, 30);
+        thread.run();
+    }
 }

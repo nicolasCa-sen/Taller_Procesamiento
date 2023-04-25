@@ -1,6 +1,6 @@
 package GUI;
 
-import Control.Control;
+import Control.LoginControl;
 import Logic.Client;
 
 import javax.swing.*;
@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 
 public class Login extends JFrame {
 
-    private Control control = new Control(this);
+    private LoginControl loginControl = new LoginControl(this);
     private Client client = new Client("", 0);
 
     private JPanel panelPrincipal = new JPanel();
@@ -85,7 +85,7 @@ public class Login extends JFrame {
         });
 
         addButtonToPanel(btnLogin, (JPanel) panelPrincipal.getComponent(2), e -> {
-            if (control.idExists(txtIdentification.getText())) {
+            if (loginControl.idExists(txtIdentification.getText())) {
                 client.setId(Integer.parseInt(txtIdentification.getText()));
                 new HospitalForm(this).setVisible(true);
                 dispose();

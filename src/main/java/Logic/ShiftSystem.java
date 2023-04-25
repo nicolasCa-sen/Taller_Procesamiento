@@ -1,61 +1,30 @@
 package Logic;
 
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ShiftSystem {
 
-    private ArrayList<Consultation> cons_Gene = new ArrayList<>();
-    private ArrayList<Consultation> cons_Cardi = new ArrayList<>();
-    private ArrayList<Consultation> cons_Trauma = new ArrayList<>();
-    private ArrayList<Consultation> cons_Oftam = new ArrayList<>();
-    private ArrayList<Consultation> cons_Dermat = new ArrayList<>();
+    private Map<String, List<Consultation>> consultationsMap = new HashMap<>();
 
     public ShiftSystem() {
+        consultationsMap.put("Consulta médica general", new ArrayList<>());
+        consultationsMap.put("Consulta con especialista en cardiología", new ArrayList<>());
+        consultationsMap.put("Consulta con especialista en traumatología", new ArrayList<>());
+        consultationsMap.put("Consulta con especialista en oftalmología", new ArrayList<>());
+        consultationsMap.put("Consulta con especialista en dermatología", new ArrayList<>());
     }
 
-    public void turno( Client client, Integer t_Consult){
-
-
-
-        switch (t_Consult) {
-            case 0:
-                cons_Gene.add(new Consultation(client,cons_Gene.size()+1));
-                break;
-            case 1:
-                cons_Cardi.add(new Consultation(client,cons_Cardi.size()+1));
-                break;
-            case 2 :
-                cons_Trauma.add(new Consultation(client,cons_Trauma.size()+1));
-                break;
-            case 3 :
-                cons_Oftam.add(new Consultation(client,cons_Oftam.size()+1));
-                break;
-            case 4 :
-                cons_Dermat.add(new Consultation(client,cons_Dermat.size()+1));
-                break;
-            default:
+    public void turno(Client client, String shiftConsultation) {
+        List<Consultation> consultations = consultationsMap.get(shiftConsultation);
+        if (consultations != null) {
+            consultations.add(new Consultation(client, consultations.size() + 1));
         }
-
-
-    }
-    public ArrayList<Consultation> getCons_Gene() {
-        return cons_Gene;
     }
 
-    public ArrayList<Consultation> getCons_Cardi() {
-        return cons_Cardi;
-    }
-
-    public ArrayList<Consultation> getCons_Trauma() {
-        return cons_Trauma;
-    }
-
-    public ArrayList<Consultation> getCons_Oftam() {
-        return cons_Oftam;
-    }
-
-    public ArrayList<Consultation> getCons_Dermat() {
-        return cons_Dermat;
+    public Map<String, List<Consultation>> getConsultationsMap() {
+        return consultationsMap;
     }
 }

@@ -1,5 +1,7 @@
 package GUI;
 
+import Control.LogicControl;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
@@ -11,6 +13,7 @@ public class RowCustomer extends JFrame {
     private static final int FORM_HEIGHT = 480;
     private static final String[] columnNames = {"Identificación", "Nombre", "Estado", "Tiempo restante"};
     private Login principal;
+    private LogicControl logicControl;
 
     private JPanel infomationPanel;
     private JPanel tablePanel;
@@ -45,12 +48,25 @@ public class RowCustomer extends JFrame {
         surgeryField.setHorizontalAlignment(SwingConstants.CENTER);
         surgeryField.setEditable(false);
         switch (option) {
-            case 0 -> surgeryField.setText("Consultorio 1");
-            case 1 -> surgeryField.setText("Consultorio 2");
-            case 2 -> surgeryField.setText("Consulta con especialista en cardiología");
-            case 3 -> surgeryField.setText("Consulta con especialista en traumatología");
-            case 4 -> surgeryField.setText("Consulta con especialista en oftalmología");
-            case 5 -> surgeryField.setText("Consulta con especialista en dermatología");
+            case 0:
+                surgeryField.setText("Consultorio 1");
+
+                break;
+            case 1:
+                surgeryField.setText("Consultorio 2");
+                break;
+            case 2:
+                surgeryField.setText("Consulta con especialista en cardiología");
+                break;
+            case 3:
+                surgeryField.setText("Consulta con especialista en traumatología");
+                break;
+            case 4:
+                surgeryField.setText("Consulta con especialista en oftalmología");
+                break;
+            case 5:
+                surgeryField.setText("Consulta con especialista en dermatología");
+                break;
         }
         infomationPanel.add(surgeryField);
 

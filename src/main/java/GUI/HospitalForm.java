@@ -1,6 +1,7 @@
 package GUI;
 
-import Control.Control;
+import Control.LogicControl;
+import Control.LoginControl;
 import Logic.Client;
 
 import javax.swing.*;
@@ -56,7 +57,8 @@ public class HospitalForm extends JFrame {
     private final ActionListener[] moduleButtonActions = new ActionListener[6];
 
     private Login principal;
-    private Control control = new Control(principal);
+    private LoginControl loginControl = new LoginControl(principal);
+    private LogicControl logicControl = new LogicControl();
 
     // Componentes para el formulario de inicio sesión
     private JPanel panelForm = new JPanel();
@@ -103,7 +105,7 @@ public class HospitalForm extends JFrame {
         identificationField.setEditable(false);
 
         // Se busca el cliente en el sistema y se setean los datos del cliente
-        Optional<Client> clientOptional = control.findClientById(principal.getClient().getId());
+        Optional<Client> clientOptional = loginControl.findClientById(principal.getClient().getId());
         if (clientOptional.isPresent()) {
             Client client = clientOptional.get();
             nameField.setHorizontalAlignment(SwingConstants.CENTER);
@@ -128,7 +130,9 @@ public class HospitalForm extends JFrame {
         // Configuración del botón de ingreso
         configButton(loginButton, 125, 55, 24);
         addButtonToPanel(loginButton, panelLoginButton, e -> {
-            // TODO: Código para ingresar un cliente a la fila
+            JOptionPane.showMessageDialog(null, logicControl.addClientToQueue(principal.getClient(),
+                    (String) procedureComboBox.getSelectedItem()));
+            logicControl.getModules().addRow(principal.getClient(), (String) procedureComboBox.getSelectedItem());
         });
 
         // Configuración del botón de regresar
