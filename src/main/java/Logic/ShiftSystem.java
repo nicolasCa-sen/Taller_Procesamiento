@@ -17,7 +17,7 @@ public class ShiftSystem {
         consultationsMap.put("Consulta con especialista en dermatología", new ArrayList<>());
     }
 
-    public void turno(Client client, String shiftConsultation) {
+    public void addClient(Client client, String shiftConsultation) {
         List<Consultation> consultations = consultationsMap.get(shiftConsultation);
         if (consultations != null) {
             consultations.add(new Consultation(client, consultations.size() + 1));

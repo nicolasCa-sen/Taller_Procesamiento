@@ -1,7 +1,6 @@
 package GUI;
 
-import Control.LogicControl;
-import Control.LoginControl;
+import Control.Control;
 import Logic.Client;
 
 import javax.swing.*;
@@ -53,12 +52,12 @@ public class HospitalForm extends JFrame {
             "Consulta con especialista en dermatología"
     };
 
+    private int shiftsText[] = {0, 0, 0, 0, 0, 0};
     private final String[] textos = {"00:10", "00:10", "00:15", "00:25", "00:30", "01:00"};
     private final ActionListener[] moduleButtonActions = new ActionListener[6];
 
     private Login principal;
-    private LoginControl loginControl = new LoginControl(principal);
-    private LogicControl logicControl = new LogicControl();
+    private Control control = new Control(principal);
 
     // Componentes para el formulario de inicio sesión
     private JPanel panelForm = new JPanel();
@@ -105,7 +104,7 @@ public class HospitalForm extends JFrame {
         identificationField.setEditable(false);
 
         // Se busca el cliente en el sistema y se setean los datos del cliente
-        Optional<Client> clientOptional = loginControl.findClientById(principal.getClient().getId());
+        Optional<Client> clientOptional = control.findClientById(principal.getClient().getId());
         if (clientOptional.isPresent()) {
             Client client = clientOptional.get();
             nameField.setHorizontalAlignment(SwingConstants.CENTER);
@@ -130,10 +129,24 @@ public class HospitalForm extends JFrame {
         // Configuración del botón de ingreso
         configButton(loginButton, 125, 55, 24);
         addButtonToPanel(loginButton, panelLoginButton, e -> {
-            JOptionPane.showMessageDialog(null, logicControl.addClientToQueue(principal.getClient(),
-                    (String) procedureComboBox.getSelectedItem()));
-            logicControl.getModules().addRow(principal.getClient(), (String) procedureComboBox.getSelectedItem());
+            int indexModule = moduleComboBox.getSelectedIndex();
+            int indexProcedure = procedureComboBox.getSelectedIndex();
+
+            if (indexProcedure > 2) {
+                shiftsText[indexProcedure + 1]++;
+                char letter = (char) ('A' + indexProcedure);
+                shiftFields[indexProcedure][0].setText(letter + " - " + String.format("%2d", shiftsText[indexProcedure]));
+                shiftFields[indexProcedure][1].setText(letter + " - " + String.format("%2d", (shiftsText[indexProcedure]) + 1));
+            }
+
+            if (indexModule >= 0 && indexModule < MODULES.length) {
+                shiftsText[indexModule]++;
+                char letter = (char) ('A' + indexModule);
+                shiftFields[indexModule][0].setText(letter + " - " + String.format("%2d", shiftsText[indexModule]));
+                shiftFields[indexModule][1].setText(letter + " - " + String.format("%2d", (shiftsText[indexModule]) + 1));
+            }
         });
+
 
         // Configuración del botón de regresar
         configButton(backButton, 125, 55, 24);
@@ -178,8 +191,8 @@ public class HospitalForm extends JFrame {
 
         // Crear y configurar los campos de texto de cada turno
         for (int i = 0; i < shiftFields.length; i++) {
-            shiftFields[i][0] = new JTextField(letter + " - 00", 1);
-            shiftFields[i][1] = new JTextField(letter + " - 01", 1);
+            shiftFields[i][0] = new JTextField(letter + " - " + shiftsText[i], 1);
+            shiftFields[i][1] = new JTextField(letter + " - " + (shiftsText[i] + 1), 1);
             shiftFields[i][2] = new JTextField(textos[i], 1);
             shiftFields[i][0].setHorizontalAlignment(SwingConstants.CENTER);
             shiftFields[i][1].setHorizontalAlignment(SwingConstants.CENTER);

@@ -1,7 +1,5 @@
 package GUI;
 
-import Control.LogicControl;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
@@ -13,7 +11,6 @@ public class RowCustomer extends JFrame {
     private static final int FORM_HEIGHT = 480;
     private static final String[] columnNames = {"Identificación", "Nombre", "Estado", "Tiempo restante"};
     private Login principal;
-    private LogicControl logicControl;
 
     private JPanel infomationPanel;
     private JPanel tablePanel;

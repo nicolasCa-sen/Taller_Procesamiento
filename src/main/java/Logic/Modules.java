@@ -11,7 +11,7 @@ public class Modules {
     }
 
     public void addRow(Client client, String consultationType) {
-        shiftSystem.turno(client, consultationType);
+        shiftSystem.addClient(client, consultationType);
     }
 
     public void listGeneral() {
@@ -50,33 +50,46 @@ public class Modules {
         return sb.toString();
     }
 
+    public void iniciarModulo1() {
+        List<Consultation> consultas = shiftSystem.getConsultationsMap().get("Consulta médica general");
+        ConsultationProcess proceso = new ConsultationProcess(consultas, 10);
+        Thread hilo = new Thread(proceso);
+        hilo.start();
+    }
+
     public void Modul1() {
         List<Consultation> consultations = shiftSystem.getConsultationsMap().get("Consulta médica general");
-        ConsultationProcess thread = new ConsultationProcess(consultations, 10);
-        thread.run();
+        ConsultationProcess process = new ConsultationProcess(consultations, 10);
+        Thread thread = new Thread(process);
+        thread.start();
     }
 
     public void Modul2() {
         List<Consultation> consultations = shiftSystem.getConsultationsMap().get("Consulta con especialista en cardiología");
-        ConsultationProcess thread = new ConsultationProcess(consultations, 10);
-        thread.run();
+        ConsultationProcess process = new ConsultationProcess(consultations, 10);
+        Thread thread = new Thread(process);
+        thread.start();
     }
 
     public void Modul3() {
         List<Consultation> consultations = shiftSystem.getConsultationsMap().get("Consulta con especialista en traumatología");
-        ConsultationProcess thread = new ConsultationProcess(consultations, 15);
-        thread.run();
+        ConsultationProcess process = new ConsultationProcess(consultations, 15);
+        Thread thread = new Thread(process);
+        thread.start();
     }
 
     public void Modul4() {
         List<Consultation> consultations = shiftSystem.getConsultationsMap().get("Consulta con especialista en oftalmología");
-        ConsultationProcess thread = new ConsultationProcess(consultations, 25);
-        thread.run();
+        ConsultationProcess process = new ConsultationProcess(consultations, 25);
+        Thread thread = new Thread(process);
+        thread.start();
     }
 
     public void Modul5() {
         List<Consultation> consultations = shiftSystem.getConsultationsMap().get("Consulta con especialista en dermatología");
-        ConsultationProcess thread = new ConsultationProcess(consultations, 30);
-        thread.run();
+        ConsultationProcess process = new ConsultationProcess(consultations, 30);
+        Thread thread = new Thread(process);
+        thread.start();
     }
+
 }

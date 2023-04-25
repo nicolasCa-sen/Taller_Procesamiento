@@ -1,16 +1,15 @@
 package Presentation;
 
-import Control.LoginControl;
+import Control.Control;
 import GUI.Login;
 import Logic.Client;
-import Logic.ConsultationProcess;
 import Logic.Modules;
 
 public class Main {
 
     public static void main(String[] args) {
         Login principal = new Login();
-        new LoginControl(principal).launchWindow();
+        new Control(principal).launchWindow();
 
         Modules modules = new Modules();
         modules.addRow(new Client("Numar", 123), "Consulta médica general");

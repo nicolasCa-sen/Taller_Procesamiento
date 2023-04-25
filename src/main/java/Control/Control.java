@@ -2,6 +2,7 @@ package Control;
 
 import GUI.Login;
 import Logic.Client;
+import Logic.ShiftSystem;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -15,14 +16,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class LoginControl {
+public class Control {
 
     private static final String FILE_NAME = "database.json";
     private static final Gson gson = new Gson();
     private List<Client> clientList;
+    private ShiftSystem shiftSystem;
     private Login login;
 
-    public LoginControl(Login principal) {
+    public Control(Login principal) {
+        this.shiftSystem = new ShiftSystem();
         this.login = principal;
         loadClientList();
     }
@@ -165,5 +168,9 @@ public class LoginControl {
         String userName = client.getName();
         String message = String.format("<html><h2>Bienvenido de vuelta, %s!</h2></html>", userName);
         JOptionPane.showMessageDialog(null, message, "Identificación encontrada", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public ShiftSystem getShiftSystem() {
+        return shiftSystem;
     }
 }
