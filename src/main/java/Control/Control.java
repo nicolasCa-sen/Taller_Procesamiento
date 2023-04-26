@@ -2,7 +2,8 @@ package Control;
 
 import GUI.Login;
 import Logic.Client;
-import Logic.ShiftSystem;
+import Logic.Rows;
+import Logic.RowSystem;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -21,12 +22,16 @@ public class Control {
     private static final String FILE_NAME = "database.json";
     private static final Gson gson = new Gson();
     private List<Client> clientList;
-    private ShiftSystem shiftSystem;
     private Login login;
 
+    private RowSystem rowSystem;
+    private Rows rows;
+
     public Control(Login principal) {
-        this.shiftSystem = new ShiftSystem();
         this.login = principal;
+        this.rowSystem = new RowSystem();
+        this.rows = new Rows();
+
         loadClientList();
     }
 
@@ -170,7 +175,11 @@ public class Control {
         JOptionPane.showMessageDialog(null, message, "Identificación encontrada", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public ShiftSystem getShiftSystem() {
-        return shiftSystem;
+    public RowSystem getShiftSystem() {
+        return rowSystem;
+    }
+
+    public Rows getModules() {
+        return rows;
     }
 }

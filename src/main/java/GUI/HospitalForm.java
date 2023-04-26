@@ -2,23 +2,23 @@ package GUI;
 
 import Control.Control;
 import Logic.Client;
+import Logic.CountDownThread;
+import Logic.Rows;
+import Logic.ThreadCompleteListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class HospitalForm extends JFrame {
 
-    // Atributos de la clase
     private static final int FORM_WIDTH = 1000;
     private static final int FORM_HEIGHT = 480;
-
-    private final int BUTTON_WIDTH = 500;
-    private final int BUTTON_HEIGHT = 40;
-    private final int BUTTON_FONT_SIZE = 20;
 
     private final Color PANEL_COLOR = new Color(188, 227, 255);
     private final Color BUTTON_COLOR = new Color(77, 205, 255);
@@ -52,34 +52,42 @@ public class HospitalForm extends JFrame {
             "Consulta con especialista en dermatología"
     };
 
-    private int shiftsText[] = {0, 0, 0, 0, 0, 0};
-    private final String[] textos = {"00:10", "00:10", "00:15", "00:25", "00:30", "01:00"};
+    private final int BUTTON_WIDTH = 500;
+    private final int BUTTON_HEIGHT = 40;
+    private final int BUTTON_FONT_SIZE = 20;
+
+    private boolean isThreadRunning = false;
+    private CountDownThread countDownThread;
+    private final int shiftsText[] = {0, 0, 0, 0, 0, 0};
+    private final String[] timeText = {"10", "10", "15", "25", "30", "45"};
+    private final String[] textos = {"00:", "00:", "00:", "00:", "00:", "00:"};
     private final ActionListener[] moduleButtonActions = new ActionListener[6];
+    private Map<Integer, Integer> shiftsTextMap = new HashMap<>();
 
     private Login principal;
+    private Rows rows;
     private Control control = new Control(principal);
 
-    // Componentes para el formulario de inicio sesión
     private JPanel panelForm = new JPanel();
-    private JPanel panelLoginButton = new JPanel();
-    private JPanel panelClientInformation = new JPanel();
     private JTextField nameField = new JTextField(20);
     private JTextField identificationField = new JTextField(20);
-    private JButton loginButton = new JButton(LOGIN_BUTTON_TEXT);
-    private JButton backButton = new JButton(BACK_BUTTON_TEXT);
     private JComboBox<String> procedureComboBox = new JComboBox<>(PROCEDURE_TYPES);
     private JComboBox<String> moduleComboBox = new JComboBox<>(MODULES);
+    private JButton loginButton = new JButton(LOGIN_BUTTON_TEXT);
+    private JButton backButton = new JButton(BACK_BUTTON_TEXT);
+    private JPanel panelLoginButton = new JPanel();
+    private JPanel panelClientInformation = new JPanel();
 
-    // Componentes para la información de los módulos y sus respectivos turnos
     private JPanel panelModules = new JPanel();
     private JPanel[] panelModuleButtons = new JPanel[MODULES.length];
     private JPanel[] panelShifts = new JPanel[MODULES.length];
     private JTextField[][] shiftFields = new JTextField[MODULES.length][3];
     private JButton[] moduleButtons = new JButton[MODULES.length];
 
-    public HospitalForm(Login principal) {
+    public HospitalForm(Login principal, Rows rows) {
         super("Hospital");
         this.principal = principal;
+        this.rows = rows;
         setSize(FORM_WIDTH, FORM_HEIGHT);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -92,6 +100,13 @@ public class HospitalForm extends JFrame {
     public void launchPanels() {
         setupFormPanel();
         setupModulesPanel();
+    }
+
+    private void updateShiftFields(int moduleIndex, int shiftIncrement, JTextField[] shiftFields) {
+        shiftsTextMap.put(moduleIndex, shiftsTextMap.getOrDefault(moduleIndex, 0) + shiftIncrement);
+        char letter = (char) ('A' + moduleIndex);
+        shiftFields[0].setText(letter + " - " + String.format("%2d", shiftsTextMap.get(moduleIndex)));
+        shiftFields[1].setText(letter + " - " + String.format("%2d", shiftsTextMap.get(moduleIndex) + 1));
     }
 
     public void setupFormPanel() {
@@ -129,24 +144,43 @@ public class HospitalForm extends JFrame {
         // Configuración del botón de ingreso
         configButton(loginButton, 125, 55, 24);
         addButtonToPanel(loginButton, panelLoginButton, e -> {
+            if (isThreadRunning) {
+                JOptionPane.showMessageDialog(null, "Estás dentro de un consultorio en este momento");
+                return;
+            }
+
             int indexModule = moduleComboBox.getSelectedIndex();
             int indexProcedure = procedureComboBox.getSelectedIndex();
+            int selectedShiftField = switch (indexProcedure) {
+                case 1 -> 2;
+                case 2 -> 3;
+                case 3 -> 4;
+                case 4 -> 5;
+                default -> indexModule;
+            };
 
-            if (indexProcedure > 2) {
-                shiftsText[indexProcedure + 1]++;
-                char letter = (char) ('A' + indexProcedure);
-                shiftFields[indexProcedure][0].setText(letter + " - " + String.format("%2d", shiftsText[indexProcedure]));
-                shiftFields[indexProcedure][1].setText(letter + " - " + String.format("%2d", (shiftsText[indexProcedure]) + 1));
+            countDownThread = new CountDownThread(shiftFields[selectedShiftField][2]);
+            countDownThread.addThreadCompleteListener(new ThreadCompleteListener() {
+                @Override
+                public void notifyOfThreadComplete(Thread thread) {
+                    isThreadRunning = false;
+                }
+            });
+            countDownThread.start();
+            isThreadRunning = true;
+
+            if (indexProcedure == 0) {
+                control.getModules().addRow(principal.getClient(), PROCEDURE_TYPES[0]);
+            } else {
+                control.getModules().addRow(principal.getClient(), PROCEDURE_TYPES[indexProcedure]);
             }
 
-            if (indexModule >= 0 && indexModule < MODULES.length) {
-                shiftsText[indexModule]++;
-                char letter = (char) ('A' + indexModule);
-                shiftFields[indexModule][0].setText(letter + " - " + String.format("%2d", shiftsText[indexModule]));
-                shiftFields[indexModule][1].setText(letter + " - " + String.format("%2d", (shiftsText[indexModule]) + 1));
+            if (indexProcedure >= 1 && indexProcedure <= 4) {
+                updateShiftFields(indexProcedure + 1, 1, shiftFields[indexProcedure + 1]);
+            } else {
+                updateShiftFields(indexModule, 1, shiftFields[indexModule]);
             }
         });
-
 
         // Configuración del botón de regresar
         configButton(backButton, 125, 55, 24);
@@ -193,7 +227,7 @@ public class HospitalForm extends JFrame {
         for (int i = 0; i < shiftFields.length; i++) {
             shiftFields[i][0] = new JTextField(letter + " - " + shiftsText[i], 1);
             shiftFields[i][1] = new JTextField(letter + " - " + (shiftsText[i] + 1), 1);
-            shiftFields[i][2] = new JTextField(textos[i], 1);
+            shiftFields[i][2] = new JTextField(timeText[i]);
             shiftFields[i][0].setHorizontalAlignment(SwingConstants.CENTER);
             shiftFields[i][1].setHorizontalAlignment(SwingConstants.CENTER);
             shiftFields[i][2].setHorizontalAlignment(SwingConstants.CENTER);
@@ -234,7 +268,7 @@ public class HospitalForm extends JFrame {
     }
 
     private void openRowCustomer(int index) {
-        new RowCustomer(principal, index).setVisible(true);
+        new RowCustomer(principal, index, control.getModules()).setVisible(true);
         dispose();
     }
 

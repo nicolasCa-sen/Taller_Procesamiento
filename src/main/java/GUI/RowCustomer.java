@@ -1,16 +1,25 @@
 package GUI;
 
+import Control.Control;
+import Logic.Consultation;
+import Logic.Rows;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class RowCustomer extends JFrame {
 
     private static final int FORM_WIDTH = 854;
     private static final int FORM_HEIGHT = 480;
-    private static final String[] columnNames = {"Identificación", "Nombre", "Estado", "Tiempo restante"};
+    private static final String[] columnNames = {"Identificación", "Nombre", "Estado"};
+
     private Login principal;
+    private Rows rows;
+    private Control control = new Control(principal);
 
     private JPanel infomationPanel;
     private JPanel tablePanel;
@@ -20,20 +29,32 @@ public class RowCustomer extends JFrame {
     private JTable table;
     private JButton backButton;
 
-    public RowCustomer(Login principal, int option) {
+    public RowCustomer(Login principal, int option, Rows rows) {
         super("Fila Clientes");
         this.principal = principal;
+        this.rows = rows;
         setSize(FORM_WIDTH, FORM_HEIGHT);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        createInformationPanel(option);
         createTablePanel();
+        createInformationPanel(option);
 
         getContentPane().setBackground(new Color(188, 227, 255));
         this.add(infomationPanel, BorderLayout.NORTH);
         this.add(tablePanel, BorderLayout.CENTER);
+    }
+
+    private DefaultTableModel createTableModel(List<Consultation> consultClients) {
+        Object[][] newData = new Object[consultClients.size()][3];
+        for (int i = 0; i < consultClients.size(); i++) {
+            Consultation consultation = consultClients.get(i);
+            newData[i][0] = consultation.getCliente().getId();
+            newData[i][1] = consultation.getCliente().getName();
+            newData[i][2] = "Atendido";
+        }
+        return new DefaultTableModel(newData, columnNames);
     }
 
     private void createInformationPanel(int option) {
@@ -44,29 +65,42 @@ public class RowCustomer extends JFrame {
         surgeryField.setPreferredSize(new Dimension(180, 30));
         surgeryField.setHorizontalAlignment(SwingConstants.CENTER);
         surgeryField.setEditable(false);
+
+        List<Consultation> consultClients;
         switch (option) {
-            case 0:
+            case 0 -> {
                 surgeryField.setText("Consultorio 1");
-
-                break;
-            case 1:
+                consultClients = rows.listGeneral();
+                table.setModel(createTableModel(consultClients));
+            }
+            case 1 -> {
                 surgeryField.setText("Consultorio 2");
-                break;
-            case 2:
+                consultClients = rows.listGeneral();
+                table.setModel(createTableModel(consultClients));
+            }
+            case 2 -> {
                 surgeryField.setText("Consulta con especialista en cardiología");
-                break;
-            case 3:
+                consultClients = rows.listCardio();
+                table.setModel(createTableModel(consultClients));
+            }
+            case 3 -> {
                 surgeryField.setText("Consulta con especialista en traumatología");
-                break;
-            case 4:
+                consultClients = rows.listTraum();
+                table.setModel(createTableModel(consultClients));
+            }
+            case 4 -> {
                 surgeryField.setText("Consulta con especialista en oftalmología");
-                break;
-            case 5:
+                consultClients = rows.listOftamo();
+                table.setModel(createTableModel(consultClients));
+            }
+            case 5 -> {
                 surgeryField.setText("Consulta con especialista en dermatología");
-                break;
+                consultClients = rows.listDermato();
+                table.setModel(createTableModel(consultClients));
+            }
         }
-        infomationPanel.add(surgeryField);
 
+        infomationPanel.add(surgeryField);
         createBackButton();
     }
 
@@ -74,7 +108,7 @@ public class RowCustomer extends JFrame {
         backButton = new JButton("Regresar");
         configButton(backButton, 250, 30, 15);
         addButtonToPanel(backButton, infomationPanel, e -> {
-            new HospitalForm(principal).setVisible(true);
+            new HospitalForm(principal, rows).setVisible(true);
             dispose();
         });
     }
@@ -93,6 +127,8 @@ public class RowCustomer extends JFrame {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
         scrollPane = new JScrollPane(table);
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
+        tablePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 15, 5));
         tablePanel.add(scrollPane, BorderLayout.CENTER);
     }
 

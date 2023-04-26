@@ -87,7 +87,8 @@ public class Login extends JFrame {
         addButtonToPanel(btnLogin, (JPanel) panelPrincipal.getComponent(2), e -> {
             if (control.idExists(txtIdentification.getText())) {
                 client.setId(Integer.parseInt(txtIdentification.getText()));
-                new HospitalForm(this).setVisible(true);
+                client.setName(control.findClientById(Integer.parseInt(txtIdentification.getText())).get().getName());
+                new HospitalForm(this, control.getModules()).setVisible(true);
                 dispose();
             }
         });

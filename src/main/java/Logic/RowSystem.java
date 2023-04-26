@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ShiftSystem {
+public class RowSystem {
 
     private Map<String, List<Consultation>> consultationsMap = new HashMap<>();
 
-    public ShiftSystem() {
+    public RowSystem() {
         consultationsMap.put("Consulta médica general", new ArrayList<>());
         consultationsMap.put("Consulta con especialista en cardiología", new ArrayList<>());
         consultationsMap.put("Consulta con especialista en traumatología", new ArrayList<>());
